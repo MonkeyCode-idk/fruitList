@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水果购物车</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+
+    <div class="cart-container" id="app">
+        <!-- 标题行 -->
+        <div class="cart-header">
+            <div class="col-check">选中</div>
+            <div class="col-img">图片</div>
+            <div class="col-price">单价</div>
+            <div class="col-count">个数</div>
+            <div class="col-subtotal">小计</div>
+            <div class="col-action">操作</div>
+        </div>
+
+        <!-- 商品 1 -->
+        <div class="cart-item" v-for="(item,index) in  fruitList" :key="item.id"
+            :class="{checkActive: item.isChecked === true}">
+            <div class="col-check">
+                <input type="checkbox" v-model="item.isChecked">
+            </div>
+            <div class="col-img">
+                <img :src=" fruitList[index].img" alt="" v-bind:title="item.name">
+            </div>
+            <div class="col-price"><span class="unit">¥</span>{{item.price}}</div>
+            <div class="col-count">
+                <button class="btn-minus" @click="sub(item.id)" :disabled="item.num <= 1">−</button>
+                <input type="text" class="count-input" :value="item.num" readonly>
+                <button class="btn-plus" @click="add(item.id)">+</button>
+            </div>
+            <div class="col-subtotal"><span class="unit">¥</span>{{item.num * item.price}}</div>
+            <div class="col-action">
+                <button class="btn-delete" @click="del(item.id)">删除</button>
+            </div>
+        </div>
+
+        <!-- 空购物车提示 -->
+        <div class="cart-empty" v-show=" fruitList.length <= 0">
+            <span class="cart-empty-icon">🛒</span>
+            <span class="cart-empty-text">购物车空空如也~</span>
+        </div>
+
+        <!-- 底部结算栏 -->
+        <div class="cart-footer">
+            <div class="footer-left">
+                <input type="checkbox" v-model="isAll">
+                <label class="select-all-label">全选</label>
+                <span class="divider"></span>
+            </div>
+            <div class="footer-right">
+                <span class="total-label">已选 <strong>{{totalCount}}</strong> 件，合计：</span>
+                <span class="total-price"><span class="unit">¥</span>{{total}}</span>
+                <button class="btn-checkout">去结算</button>
+            </div>
+        </div>
+    </div>
+    <script src="./vue.js"></script>
+
+    <script src="./index.js"></script>
+</body>
+
+</html>
